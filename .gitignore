@@ -1,0 +1,8 @@
+.DS_Store
+# Ignore all Terraform state files in any folder
+**/*.tfstate
+**/*.tfstate.backup
+*.tfstate
+*.tfstate.backup
+.terraform
+image.png
