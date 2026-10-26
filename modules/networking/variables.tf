@@ -9,6 +9,16 @@ variable "vpc_cidr" {
   default = "10.0.0.0/16"
 }
 
+variable "public_subnet_cidrs" {
+  description = "The CIDR for Public VPC"
+  type = list(string)
+}
+
+variable "private_subnet_cidrs" {
+  description = "The CIDR for Private VPC"
+  type = list(string)
+}
+
 variable "env" {
   description = "Target environment"
   type = string

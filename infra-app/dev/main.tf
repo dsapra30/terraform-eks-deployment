@@ -1,27 +1,27 @@
-
-module "networking" {
+# 1. Spin up the native custom VPC
+module "vpc" {
   source = "../../modules/networking"
 
-  cluster_name = "dev-eks-cluster"
-  vpc_cidr = "10.0.0.0/16"
-  env = "dev"
+  env          = "dev"
+  cluster_name         = "dev-core-cluster"
+  vpc_cidr             = "10.10.0.0/16"
+  public_subnet_cidrs  = ["10.10.1.0/24", "10.10.2.0/24"]
+  private_subnet_cidrs = ["10.10.11.0/24", "10.10.12.0/24"]
 }
 
-module "dev_infra_deployment" {
+# 2. Pipe the custom VPC outputs straight into your custom EKS cluster
+module "eks" {
   source = "../../modules/eks"
 
-  vpc_id = module.networking.vpc_id
-  private_subnets = module.networking.private_subnets
+  environment        = "dev"
+  cluster_name       = "dev-core-cluster"
+  vpc_id             = module.vpc.vpc_id
+  private_subnet_ids = module.vpc.private_subnet_ids
 
-  cluster_name = "dev-eks-cluster"
-  cluster_version = "1.32"
-
-  instance_types = ["t3.small"]
-  ami_type = "AL2023_x86_64_STANDARD"
-
-  min_size = 2
-  max_size = 3
-  desired_size = 2
-
-  env = "dev"
+  node_instance_types = ["t3.small"]
+  scaling_config = {
+    desired_size = 2
+    max_size     = 3
+    min_size     = 1
+  }
 }

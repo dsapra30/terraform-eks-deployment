@@ -1,20 +1,9 @@
 output "cluster_endpoint" {
-  description = "The endpoint URL for the EKS Kubernetes API server"
-  value       = module.eks.cluster_endpoint
+  value       = aws_eks_cluster.this.endpoint
+  description = "The endpoint for your EKS Kubernetes API."
 }
 
-output "cluster_security_group_id" {
-  description = "Security group ID attached to the EKS cluster control plane"
-  value       = module.eks.cluster_security_group_id
+output "cluster_certificate_authority_data" {
+  value       = aws_eks_cluster.this.certificate_authority[0].data
+  description = "The base64 encoded certificate data required to communicate with your cluster."
 }
-
-output "cluster_arn" {
-  description = "The Amazon Resource Name (ARN) of the cluster"
-  value       = module.eks.cluster_arn
-}
-
-output "cluster_name" {
-  description = "The name of the EKS cluster"
-  value       = module.eks.cluster_name
-}
-

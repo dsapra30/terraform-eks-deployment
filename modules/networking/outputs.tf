@@ -1,9 +1,14 @@
 output "vpc_id" {
-  description = "The ID of the custom VPC"
-  value       = module.vpc.vpc_id
+  value       = aws_vpc.this.id
+  description = "The ID of the generated VPC"
 }
 
-output "private_subnets" {
-  description = "List of private subnet IDs for EKS nodes"
-  value       = module.vpc.private_subnets
+output "public_subnet_ids" {
+  value       = aws_subnet.public[*].id
+  description = "List of IDs of public subnets"
+}
+
+output "private_subnet_ids" {
+  value       = aws_subnet.private[*].id
+  description = "List of IDs of private subnets"
 }
