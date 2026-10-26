@@ -1,54 +1,34 @@
-variable "cluster_name" {
-  description = "The name of the EKS cluster"
-  type = string
+variable "environment" {
+  type        = string
+  description = "The environment name (e.g., dev, prod)"
 }
 
-variable "cluster_version" {
-  description = "The kubernetes cluster to deploy"
-  type = string
-  default = "1.32"
+variable "cluster_name" {
+  type        = string
+  description = "Name of the EKS cluster"
 }
 
 variable "vpc_id" {
-  description = "The ID of the VPC passed from the networking module"
   type        = string
+  description = "The VPC ID where the cluster will be deployed"
 }
 
-variable "private_subnets" {
-  description = "The private subnets passed from the networking module"
+variable "private_subnet_ids" {
   type        = list(string)
+  description = "Subnet IDs for the EKS worker nodes"
 }
 
-variable "env" {
-  description = "Target environment"
-  type = string
-  default = "dev"
+variable "node_instance_types" {
+  type        = list(string)
+  description = "EC2 instance types for the worker nodes"
+  default     = ["t3.small"]
 }
 
-variable "ami_type" {
-  description = "The image type for worker nodes group"
-  type = string
-}
-
-variable "instance_types" {
-  description = "The instance type for worker node group"
-  type = list(string)
-}
-
-variable "min_size" {
-  description = "The minimum number of nodes"
-  type = number
-  default = 2
-}
-
-variable "max_size" {
-  description = "The max number of nodes"
-  type = number
-  default = 3
-}
-
-variable "desired_size" {
-  description = "The max number of nodes"
-  type = number
-  default = 2
+variable "scaling_config" {
+  type = object({
+    desired_size = number
+    max_size     = number
+    min_size     = number
+  })
+  description = "Scaling boundaries for the managed node group"
 }
